@@ -89,7 +89,6 @@ client = new Client
 
 client.on 'online', ->
   console.log 'Bot is online'
-  client.send new (Client.Stanza)('presence', {}).c('show').t('chat').up().c('status').t('Happily echoing your <message/> stanzas')
 
 client.on 'error', (e) ->
   console.error e
