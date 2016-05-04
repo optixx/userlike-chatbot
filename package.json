@@ -1,0 +1,19 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "description": "Simple chat bot that uses www.userlike.com live chat",
+  "main": "bot.coffee",
+  "dependencies": {
+    "node-xmpp-client": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chat",
+    "bot"
+  ],
+  "author": "David Voswinkel",
+  "license": "ISC"
+}
