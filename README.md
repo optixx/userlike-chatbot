@@ -35,6 +35,8 @@ Every incoming message triggers an event into the State machine, which trigger t
 forwards in the State machine chain.
 
 
-
-
+![Step 1](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step1.png)
+![Step 2](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step2.png)
+![Step 3](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step3.png)
+![Step 4](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step4.png)
 
