@@ -1,14 +1,14 @@
-This is a simple chat bot you can use with the www.userlike.com live chat
+This is a simple chat bot that you can use with the www.userlike.com live chat
 
 **Get Started**
 
-1. Create an account at www.userlike.com
-2. Create a new operator for you bot
-3. Remeber user name and password for this operator
+1. Create an account at https://www.userlike.com
+2. Add a new operator to you setup https://www.userlike.com/en/dashboard/config/operator/add
+3. Remember the username and password of this operator, which we will use later.
 
 **Install Bot**
 
-1. Install node.js 
+1. Install node.js  (Not using OSX? Take a look here https://nodejs.org/en/download/package-manager/)
 
    ```brew install node```
 
@@ -21,7 +21,7 @@ This is a simple chat bot you can use with the www.userlike.com live chat
 
    ```git checkout https://github.com/optixx/userlike-chatbot.git```
 
-4. Start bot using your operator credentials
+4. Start the chat bot using your operator credentials
 
    ```
    cd userlike-chatbot
