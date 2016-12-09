@@ -91,11 +91,14 @@ client = new Client
 
 client.on 'online', ->
   console.log 'Bot is online'
+  client.send new (Client.Stanza)('presence', {}).c('show').t('chat').up().c('status').t('I\'m a bot')
+
 
 client.on 'error', (e) ->
   console.error e
 
 client.on 'stanza', (stanza) ->
+  console.log stanza
   if stanza.is('message') and stanza.attrs.type isnt 'error' and stanza.attrs.level is "chat"
     from = stanza.attrs.from
     body = stanza.getChildText 'body'
