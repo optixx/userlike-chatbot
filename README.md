@@ -17,17 +17,20 @@ This is a simple chat bot that you can use with the www.userlike.com live chat
    ```npm install -g coffee-script```
 
 
-3. Checkout the chat bot repo
+3. Checkout the chat bot repo and install dependencies
 
-   ```git checkout https://github.com/optixx/userlike-chatbot.git```
+   ```
+   git checkout https://github.com/optixx/userlike-chatbot.git
+   cd userlike-chatbot
+   npm install
+   ```
 
 4. Start the chat bot using your operator credentials
 
    ```
-   cd userlike-chatbot
    coffee bot.coffee   <USERNAME>@userlike.com <PASSWORD>
    ```
-   
+
 **How does it work**
 
 The bot opens a xmpp connection to the Userlike system. Each new visitors gets a  session which is State Machine Object.
@@ -39,4 +42,3 @@ forwards in the State machine chain.
 ![Step 2](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step2.png)
 ![Step 3](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step3.png)
 ![Step 4](https://raw.githubusercontent.com/optixx/userlike-chatbot/master/assets/step4.png)
-
