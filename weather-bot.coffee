@@ -20,20 +20,6 @@ class FSM
 class State
 
   constructor: (@fsm)->
-    @exit_events = [
-      {name: "send", data: "Ok then, have a nice day!"}
-      {name: "send", data: "$quit"}
-    ]
-    @lookup_events = [
-      {name: "send", data: "Ok, I will look it up..."}
-    ]
-    @retry_events = [
-      {name: "send", data: "Ok, will try again..."}
-    ]
-    @fail_events = [
-      {name: "send", data: "Sorry, bye!"}
-      {name: "send", data: "$quit"}
-    ]
 
   enter: ->
 
@@ -57,12 +43,7 @@ class GetWeather extends State
       .catch (error) =>
         console.log error
         @fsm.event "send", "Could not get weather data - try again?"
-        @fsm.next ProcessAnswer, answers=
-          yes:
-            events: @retry_events
-            next: GetWeather
-          no:
-            events: @fail_events
+        @fsm.next ProcessAnswer, GetWeather
 
   message: ->
     @fsm.event "send", "Still looking up"
@@ -74,12 +55,7 @@ class AskCurrent extends State
     @fsm.event "send", "Do you want the current weather conditions for Cologne?"
 
   message: =>
-    @fsm.next ProcessAnswer, answers=
-      yes:
-        events: @lookup_events
-        next: GetWeather
-      no:
-        events: @exit_events
+    @fsm.next ProcessAnswer, GetWeather
 
 class ReturnCurrent extends State
 
@@ -92,24 +68,19 @@ class AskForecast extends State
 
   enter: =>
     @fsm.event "send", "Do you also want a forecast for the next ten days?"
-    @fsm.next ProcessAnswer, answers=
-      yes:
-        events: @lookup_events
-        next: ReturnForecast
-      no:
-        events: @exit_events
+    @fsm.next ProcessAnswer, ReturnForecast
 
 class ReturnForecast extends State
 
   enter: =>
     for day in sessions.weather_data.item.forecast
       @fsm.event "send", "The weather in Cologne on #{day.date}: #{day.text} (between #{day.low} and #{day.high} °C)"
-    for event in @exit_events
-      @fsm.event event.name, event.data
+    @fsm.event "send", "Ok then, have a nice day!"
+    @fsm.event "send", "$quit"
 
 class ProcessAnswer extends State
 
-  enter: (@answers) ->
+  enter: (@next) ->
 
   fuzzyInput: (message) ->
     stripped_message = message.toLowerCase().replace /^\s+|\s+$/g, ""
@@ -119,13 +90,14 @@ class ProcessAnswer extends State
       message = 'no'
     return message
 
-  message: (message) =>
-    answer = @answers[@fuzzyInput message]
-    if answer
-      for event in answer.events
-        @fsm.event event.name, event.data
-      if answer.next
-        @fsm.next answer.next
+  message: (message) ->
+    answer = @fuzzyInput message
+    if answer is 'yes'
+      @fsm.event "send", "Ok, I will look it up..."
+      @fsm.next @next
+    else if answer is 'no'
+      @fsm.event "send", "Ok then, have a nice day!"
+      @fsm.event "send", "$quit"
     else
       @fsm.event "send", "Sorry, I didn't understand that"
 
