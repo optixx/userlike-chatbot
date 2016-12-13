@@ -4,7 +4,8 @@
   "description": "Simple chat bot that uses www.userlike.com live chat",
   "main": "bot.coffee",
   "dependencies": {
-    "node-xmpp-client": "^3.0.0"
+    "node-xmpp-client": "^3.0.0",
+    "yahoo-weather": "^2.2.2"
   },
   "devDependencies": {},
   "scripts": {

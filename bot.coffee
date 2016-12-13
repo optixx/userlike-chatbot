@@ -7,9 +7,10 @@ class FSM
 
   constructor: (@from)->
     @state = new Init(@)
-  
+
   next: (state, data) ->
     console.log "next:  #{@state.constructor.name} -> #{state.name}"
+    console.log "Data:", data
     @state = new state(@)
     @state.enter(data)
 
@@ -19,9 +20,9 @@ class FSM
       @state[name](data)
 
 class State
-  
+
   constructor: (@fsm)->
-    
+
   enter: ->
 
   send: (message)->
@@ -39,12 +40,12 @@ class AskName extends State
   message: ->
     @fsm.event "send", "May I ask your name?"
     @fsm.next SetName
-    
+
 class SetName extends State
 
   message: (message)->
     @fsm.event "send", "$name #{message}"
-    @fsm.next AskEmail 
+    @fsm.next AskEmail
 
 class AskEmail extends State
 
@@ -67,13 +68,13 @@ class OfferHelp extends State
 class ProcessAnswer extends State
 
   message: (message)->
-    if message is "yes" 
+    if message is "yes"
       @fsm.event "send", "Ok i will forward you"
       @fsm.next Forward
     else if message is "no"
       @fsm.event "send", "Bye bye"
       @fsm.event "send", "$quit"
-    else 
+    else
       @fsm.event "send", "I didn't understand that"
 
 class Forward extends State
@@ -83,7 +84,7 @@ class Forward extends State
 
 
 args = process.argv.slice(2)
-sessions = {} 
+sessions = {}
 client = new Client
   jid: args[0]
   password: args[1]
@@ -98,15 +99,11 @@ client.on 'error', (e) ->
   console.error e
 
 client.on 'stanza', (stanza) ->
-  console.log stanza
   if stanza.is('message') and stanza.attrs.type isnt 'error' and stanza.attrs.level is "chat"
     from = stanza.attrs.from
     body = stanza.getChildText 'body'
     unless from of sessions
-      fsm = new FSM from 
-      sessions[from] = fsm 
+      fsm = new FSM from
+      sessions[from] = fsm
       fsm.next AskName
-    sessions[from].event "message", body 
-
-
-
+    sessions[from].event "message", body
