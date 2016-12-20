@@ -1,8 +1,6 @@
 # vim: ts=4:sw=2:expandtab
 Client = require 'node-xmpp-client'
 
-FORWARD_OPERATOR = "david"
-
 class FSM
 
   constructor: (@from)->
@@ -80,7 +78,7 @@ class ProcessAnswer extends State
 class Forward extends State
 
   enter: ->
-    @fsm.event "send", "$forward #{FORWARD_OPERATOR}"
+    @fsm.event "send", "$any"
 
 
 args = process.argv.slice(2)
