@@ -1,5 +1,5 @@
 weather = require 'yahoo-weather'
-core = require './core.coffee'
+core = require '../core.coffee'
 State = core.State
 
 
