@@ -13,14 +13,14 @@ inquirer
   .prompt [
       type: 'input',
       name: 'jid',
-      message: 'Enter your account\'s username'
+      message: 'Enter your account\'s username:'
       min_length: 5
       validate: (value) ->
         validateValue value, 3
     ,
       type: 'password',
       name: 'password',
-      message: 'Enter your account\'s password'
+      message: 'Enter your account\'s password:'
       validate: (value) ->
         validateValue value, 8
     ,
