@@ -2,10 +2,11 @@
   "name": "chatbot",
   "version": "1.0.0",
   "description": "Simple chat bot that uses www.userlike.com live chat",
-  "main": "bot.coffee",
+  "main": "client.coffee",
   "dependencies": {
     "node-xmpp-client": "^3.0.0",
-    "yahoo-weather": "^2.2.2"
+    "yahoo-weather": "^2.2.2",
+    "inquirer": "^2.0.0"
   },
   "devDependencies": {},
   "scripts": {

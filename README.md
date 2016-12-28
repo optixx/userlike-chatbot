@@ -25,10 +25,17 @@ This is a simple chat bot that you can use with the www.userlike.com live chat
    npm install
    ```
 
-4. Start the chat bot using your operator credentials
+4. Start the chat bot, provide your Userlike operator credentials and choose a bot
 
-   ```
-   coffee bot.coffee   <USERNAME>@userlike.com <PASSWORD>
+   ```sh
+   coffee client.coffee
+
+   ? Enter your account's username: <your-operator-username>
+   ? Enter your account's password: <your-operator-password>
+   ? Which host you want to connect to? (www.userlike.com)
+   ? Choose a bot (Use arrow keys)
+   ❯ butlerBot
+     weatherBot
    ```
 
 **How does it work**
