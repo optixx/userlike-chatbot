@@ -1,0 +1,17 @@
+# Dirs
+.DS_Store
+.tld_set
+.build/
+build/
+.idea
+.apdisk
+node_modules/
+
+# Files
+*.pyc
+*.pyo
+*.egg-info
+*.backup
+*.log-*
+stderr
+stdout
