@@ -41,10 +41,12 @@ class State(object):
         self.input = input
         app.logger.info('Entering state=%s with input=%s', self.__class__.__name__, self.input)
 
-    def _make_answer(self, answers, context=None):
+    def _make_answer(self, answers, context={}):
+        _context = {"state": self.next_state}
+        _context.update(context)
         return jsonify({
             "answers": answers,
-            "context": {"state": self.next_state}
+            "context": _context
         })
 
 
