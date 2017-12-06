@@ -109,7 +109,7 @@ class StateForward(State):
 
     def answer(self):
         if self.input.lower() in AFFIRMATIVE:
-            return self._make_answer(["Forwarding you to the next free human Operator...", "$any"])
+            return self._make_answer(["Forwarding you to the next free human Operator...", "$any.json"])
         else:
             return self._make_answer(["Creating a ticket. Thanks for your visit, goodbye!", "$emailticket"])
 

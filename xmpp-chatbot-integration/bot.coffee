@@ -67,19 +67,49 @@ class ProcessAnswer extends State
 
   message: (message)->
     if message is "yes"
-      @fsm.event "send", "Ok i will forward you"
+      @fsm.event "send", "Is there a specific Agent you want to talk to?"
+      @fsm.next ForwardTo
+    else if message is "no"
+      @fsm.next EndChat
+    else
+      @fsm.event "send", "I didn't understand that"
+
+class EndChat extends State
+
+  enter: ()->
+      @fsm.event "send", "!bye"
+      @fsm.event "send", "$quit"
+
+class ForwardTo extends State
+
+  message: (message)->
+    if message is "yes"
+      @fsm.event "send", "Please tell me the name of the Agent"
       @fsm.next Forward
     else if message is "no"
-      @fsm.event "send", "Bye bye"
-      @fsm.event "send", "$quit"
+      @fsm.next ForwardAny
     else
       @fsm.event "send", "I didn't understand that"
 
 class Forward extends State
 
-  enter: ->
-    @fsm.event "send", "$any"
+  message: (message)->
+    @fsm.event "send", "$forward.json #{message}"
+    @fsm.next Idle
 
+class ForwardAny extends State
+
+  enter: ->
+    @fsm.event "send", "$any.json"
+    @fsm.next Idle
+
+class Idle extends State
+
+class ProcessErrorJSON extends State
+
+  message: (message)->
+    @fsm.event "send", "JSON Response:\n#{message}"
+    @fsm.next EndChat
 
 args = process.argv.slice(2)
 sessions = {}
@@ -97,11 +127,24 @@ client.on 'error', (e) ->
   console.error e
 
 client.on 'stanza', (stanza) ->
-  if stanza.is('message') and stanza.attrs.type isnt 'error' and stanza.attrs.level is "chat"
-    from = stanza.attrs.from
+  has_next = false
+  if stanza.is('message')
     body = stanza.getChildText 'body'
-    unless from of sessions
-      fsm = new FSM from
-      sessions[from] = fsm
-      fsm.next AskName
-    sessions[from].event "message", body
+    if stanza.attrs.type isnt 'error' and stanza.attrs.level is 'chat'
+      state = AskName # Ask for Name if chat just started
+    else if stanza.attrs.type is 'chat' and stanza.attrs.level is 'warning'
+      try
+        # Send JSON Response to client if body contains valid JSON
+        if body.length
+          JSON.parse(body)
+          state = ProcessErrorJSON
+          has_next = true
+      catch
+    if state?
+      from = stanza.attrs.from
+      unless from of sessions
+        fsm = new FSM from
+        sessions[from] = fsm
+        has_next = true
+      sessions[from].next(state) if has_next
+      sessions[from].event "message", body
