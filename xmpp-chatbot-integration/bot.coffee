@@ -7,8 +7,7 @@ class FSM
     @state = new Init(@)
 
   next: (state, data) ->
-    console.log "next:  #{@state.constructor.name} -> #{state.name}"
-    console.log "Data:", data
+    console.log "next:  #{@state.constructor.name} -> #{state.name} data: #{data}"
     @state = new state(@)
     @state.enter(data)
 
@@ -33,7 +32,7 @@ class State
 
 class Init extends State
 
-class AskName extends State
+class Start extends State
 
   message: ->
     @fsm.event "send", "May I ask your name?"
@@ -105,11 +104,10 @@ class ForwardAny extends State
 
 class Idle extends State
 
-class ProcessErrorJSON extends State
-
-  message: (message)->
-    @fsm.event "send", "JSON Response:\n#{message}"
+  json: (data)->
+    @fsm.event "send", "JSON Response:\n#{data}"
     @fsm.next EndChat
+
 
 args = process.argv.slice(2)
 sessions = {}
@@ -130,21 +128,14 @@ client.on 'stanza', (stanza) ->
   has_next = false
   if stanza.is('message')
     body = stanza.getChildText 'body'
-    if stanza.attrs.type isnt 'error' and stanza.attrs.level is 'chat'
-      state = AskName # Ask for Name if chat just started
-    else if stanza.attrs.type is 'chat' and stanza.attrs.level is 'warning'
-      try
-        # Send JSON Response to client if body contains valid JSON
-        if body.length
-          JSON.parse(body)
-          state = ProcessErrorJSON
-          has_next = true
-      catch
-    if state?
-      from = stanza.attrs.from
-      unless from of sessions
-        fsm = new FSM from
-        sessions[from] = fsm
-        has_next = true
-      sessions[from].next(state) if has_next
+    userlike = stanza.getChild 'userlike'
+    level = userlike?.attrs.level
+    from = stanza.attrs.from
+    unless from of sessions
+      fsm = new FSM from
+      sessions[from] = fsm
+      sessions[from].next(Start)
+    if stanza.attrs.type isnt 'error' and level is 'chat'
       sessions[from].event "message", body
+    else if stanza.attrs.type is 'chat' and level is 'json'
+      sessions[from].event "json", body

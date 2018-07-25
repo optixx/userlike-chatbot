@@ -118,9 +118,11 @@ client.on 'error', (e) ->
   console.error e
 
 client.on 'stanza', (stanza) ->
-  if stanza.is('message') and stanza.attrs.type isnt 'error' and stanza.attrs.level is "chat"
+  body = stanza.getChildText 'body'
+  userlike = stanza.getChild 'userlike'
+  level = userlike?.attrs.level
+  if stanza.is('message') and stanza.attrs.type isnt 'error' and level is "chat"
     from = stanza.attrs.from
-    body = stanza.getChildText 'body'
     unless from of sessions
       fsm = new FSM from
       sessions[from] = fsm
