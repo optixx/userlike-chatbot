@@ -1,6 +1,16 @@
 This is a simple chat bot that you can use with the www.userlike.com live chat
 
-# HTTP integration
+# Status
+For our new product Unified Messaging (UM) we are currently working on a brand-new Bot API.
+
+For existing bot API consumers, please note:
+* the HTTP bot API described below is still operational and maintained
+* the XMPP vot API described below is no longer operational, as of September 12, 2020
+
+More info on Userlike Unified Messaging (UM):
+* https://www.userlike.com/en/blog/introducing-unified-messaging
+
+# Old HTTP integration (operational)
 
 ## Getting started
 
@@ -35,7 +45,7 @@ With one exception, all requests to and responses from your chatbot (framework) 
 https://wwww.userlike.com/en/public/tutorial/chat_bots
 
 
-# XMPP integration
+# XMPP integration (no longer operational)
 
 ## Getting started
 
